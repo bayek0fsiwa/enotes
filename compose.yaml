@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./:/app:ro
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    # depends_on:
+    #   - redis
+
+#   redis:
+#     image: redis:latest
+#     restart: always
+#     volumes:
+#       - redis_cache:/data:ro
+#     ports:
+#       - '6379:6379'
+
+# volumes:
+#   redis_cache:
