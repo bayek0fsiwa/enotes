@@ -5,7 +5,8 @@ conf()
 
 
 const _config = {
-    port: process.env.PORT
+    port: process.env.PORT,
+    dbURL: process.env.MONGO_CONNECTION_STRING,
 }
 
 
