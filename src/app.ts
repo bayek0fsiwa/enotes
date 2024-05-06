@@ -1,8 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
-import { HttpError } from "http-errors";
 import morgan from "morgan";
-import { config } from "./configs/config";
+import globalErrorHandler from "./middlewares/globalErrorHandler";
 
 
 // App init
@@ -19,13 +18,7 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
 })
 
 
-app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
-    const statusCode = err.statusCode || 500;
-    return res.status(statusCode).json({
-        message: err.message,
-        errStack: config.env === "development" ? err.stack : "",
-    });
-});
+app.use(globalErrorHandler);
 
 
 export default app;
