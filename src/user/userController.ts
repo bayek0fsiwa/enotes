@@ -46,8 +46,35 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
 
     try {
         const token = sign({ sub: newUser._id }, config.jwtSecret as string, { expiresIn: "7d", algorithm: "HS256", })
-        res.status(200).json({ accessToken: token })
+        res.status(201).json({ accessToken: token })
     } catch (err) {
         return next(createHttpError(500, "Error while signing token."))
     }
+}
+
+
+export const loginUser = async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        const error = createHttpError(400, "All fields are require");
+        return next(error);
+    }
+
+    try {
+
+        const user = await userModel.findOne({ email })
+
+        if (!user) {
+            const error = createHttpError(400, `${email} not registered!`);
+            return next(error);
+        }
+
+    } catch (err) {
+        return next(createHttpError(500, "Error while getting user!"))
+    }
+
+
+    return res.status(200).json({ message: "OK" })
+
 }
