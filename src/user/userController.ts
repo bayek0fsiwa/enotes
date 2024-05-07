@@ -2,6 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import bcrypt from "bcrypt"
 import userModel from "./userModel"
+import { sign } from "jsonwebtoken";
+import { config } from "../configs/config"
+import { User } from "./userTypes";
 
 
 export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -12,20 +15,39 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
         return next(error);
     }
 
-    const user = await userModel.findOne({ email })
+    try {
 
-    if (user) {
-        const error = createHttpError(400, "User already exist with this email.");
-        return next(error);
+        const user = await userModel.findOne({ email })
+
+        if (user) {
+            const error = createHttpError(400, "User already exist with this email.");
+            return next(error);
+        }
+
+    } catch (err) {
+        return next(createHttpError(500, "Error while getting user!"))
     }
+
+
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await userModel.create({
-        name,
-        email,
-        password: hashedPassword
-    })
+    let newUser: User;
 
-    res.status(200).json({ id: newUser._id })
+    try {
+        newUser = await userModel.create({
+            name,
+            email,
+            password: hashedPassword
+        })
+    } catch (err) {
+        return next(createHttpError(500, "Error while registering user!"))
+    }
+
+    try {
+        const token = sign({ sub: newUser._id }, config.jwtSecret as string, { expiresIn: "7d", algorithm: "HS256", })
+        res.status(200).json({ accessToken: token })
+    } catch (err) {
+        return next(createHttpError(500, "Error while signing token."))
+    }
 }

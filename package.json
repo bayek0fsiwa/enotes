@@ -1,7 +1,7 @@
 {
   "name": "enotes",
   "version": "1.0.0",
-  "description": "E-Notes library where you can upload share any kind of notes with public.",
+  "description": "E-Notes library where you can upload and share any kind of notes with public.",
   "main": "server.ts",
   "scripts": {
     "dev": "nodemon server.ts",
@@ -17,6 +17,7 @@
     "express": "^4.19.2",
     "helmet": "^7.1.0",
     "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.3",
     "morgan": "^1.10.0",
     "redis": "^4.6.13"
@@ -27,6 +28,7 @@
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.21",
     "@types/http-errors": "^2.0.4",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/mongoose": "^5.11.97",
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.12.8",
