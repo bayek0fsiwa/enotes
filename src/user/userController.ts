@@ -70,11 +70,21 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
             return next(error);
         }
 
+        if (user) {
+            const matchPassword = await bcrypt.compare(password, user.password)
+            if (!matchPassword) {
+                const error = createHttpError(400, "Invalid credential!")
+                return next(error)
+            }
+            try {
+                const token = sign({ sub: user._id }, config.jwtSecret as string, { expiresIn: "7d", algorithm: "HS256", })
+                res.status(200).json({ accessToken: token })
+            } catch (err) {
+                return next(createHttpError(500, "Error while signing token."))
+            }
+        }
+
     } catch (err) {
         return next(createHttpError(500, "Error while getting user!"))
     }
-
-
-    return res.status(200).json({ message: "OK" })
-
 }
