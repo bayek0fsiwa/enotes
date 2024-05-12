@@ -41,14 +41,14 @@ export const addNote = async (req: Request, res: Response, next: NextFunction) =
             await fs.promises.unlink(filePath);
             await fs.promises.unlink(noteFilePath);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
 
         // console.log(noteFileUploadRes);
         // console.log(uploadResult)
         res.status(201).json({ id: newNote._id })
     } catch (error) {
-        console.log(error)
+        console.error(error)
         return next(createHttpError(500, "Something went wrong."))
     }
 }
