@@ -12,7 +12,8 @@ export default async function connectDB(URI: string) {
             console.error("Error in connecting.", err);
         })
 
-        await mongoose.connect(URI);
+        const res = await mongoose.connect(URI);
+        console.info(`DB host: ${res.connection.host}`)
 
     } catch (err) {
         console.error(err);
