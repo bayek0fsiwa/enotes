@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Note } from "./notesType"
+import { Note } from "./noteType"
 
 const noteSchema = new mongoose.Schema<Note>({
     title: {

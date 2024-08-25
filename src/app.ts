@@ -3,7 +3,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import globalErrorHandler from "./middlewares/globalErrorHandler";
 import userRouter from "./user/userRouter";
-import notesRouter from "./notes/notesRouter";
+import noteRouter from "./note/noteRouter";
 
 
 // App init
@@ -23,7 +23,7 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
 
 // Routers
 app.use("/api/users", userRouter);
-app.use("/api/notes", notesRouter);
+app.use("/api/notes", noteRouter);
 
 // Global error handler
 app.use(globalErrorHandler);
