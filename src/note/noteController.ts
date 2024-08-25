@@ -13,7 +13,10 @@ export const addNote = async (req: Request, res: Response, next: NextFunction) =
         filename_override: fileName,
         folder: "note-covers",
         format: coverImageMimeType,
-    })
+    });
+
+    const noteFileName = files.file[0].filename;
+
     console.log(uploadResult);
     res.status(200).json({ message: "OK" })
 }

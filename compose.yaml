@@ -11,16 +11,20 @@ services:
       - 8080:8080
     env_file:
       - .env
-    # depends_on:
-    #   - redis
+    depends_on:
+      - mongod
+    # restart: on-failure
 
-#   redis:
-#     image: redis:latest
-#     restart: always
-#     volumes:
-#       - redis_cache:/data:ro
-#     ports:
-#       - '6379:6379'
+  mongod:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo_db:/data/db:rw
+    ports:
+      - '27017:27017'
 
-# volumes:
-#   redis_cache:
+volumes:
+  mongo_db:
