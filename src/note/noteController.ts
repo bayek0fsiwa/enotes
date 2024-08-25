@@ -4,6 +4,8 @@ import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import cloudinary from "../configs/cloudinary";
 import noteModel from "./noteModel";
+import { AuthRequest } from "../middlewares/authenticate";
+
 
 export const addNote = async (req: Request, res: Response, next: NextFunction) => {
     const { title, genre } = req.body;
@@ -27,16 +29,12 @@ export const addNote = async (req: Request, res: Response, next: NextFunction) =
             folder: "note-pdfs",
             format: "pdf"
         });
-        // console.log(uploadResult);
-        // console.log(noteUploadResult);
         // add note to database
-        // @ts-ignore
-        console.log("userId", req.userId);
-        
+        const _req = req as AuthRequest;
         const newNote = await noteModel.create({
             title,
             genre,
-            author: "66cabcf80fd8a293f2310018",
+            author: _req.userId,
             coverImage: uploadResult.secure_url,
             file: noteUploadResult.secure_url,
         })
