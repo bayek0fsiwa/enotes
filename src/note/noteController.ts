@@ -13,7 +13,16 @@ export const addNote = async (req: Request, res: Response, next: NextFunction) =
         filename_override: fileName,
         folder: "note-covers",
         format: coverImageMimeType,
-    })
-    console.log(uploadResult);
+    });
+
+    const noteFileName = files.file[0].filename;
+    const noteFilePath = path.resolve(__dirname, "../../public/data/uploads", noteFileName);
+    const noteUploadResult = await cloudinary.uploader.upload(noteFilePath, {
+        resource_type: "raw",
+        filename_override: noteFileName,
+        folder: "note-pdfs",
+        format: "pdf"
+    });
+    console.log(noteUploadResult);
     res.status(200).json({ message: "OK" })
 }
