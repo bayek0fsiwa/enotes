@@ -78,7 +78,7 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
             }
             try {
                 const token = sign({ sub: user._id }, config.jwtSecret as string, { expiresIn: "7d", algorithm: "HS256", })
-                res.status(200).json({ accessToken: token })
+                res.status(200).json({ accessToken: token, id: user._id })
             } catch (err) {
                 return next(createHttpError(500, "Error while signing token."))
             }

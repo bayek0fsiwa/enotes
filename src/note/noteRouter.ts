@@ -2,6 +2,7 @@ import path from "node:path";
 import express from "express";
 import { addNote } from "./noteController";
 import multer from "multer";
+import authenticate from "../middlewares/authenticate";
 
 const noteRouter = express.Router();
 
@@ -11,7 +12,7 @@ const upload = multer({
 
 });
 
-noteRouter.post("/", upload.fields([
+noteRouter.post("/", authenticate, upload.fields([
     { name: "coverImage", maxCount: 1 },
     { name: "file", maxCount: 1 },
 ]), addNote);
