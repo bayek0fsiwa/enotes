@@ -1,9 +1,9 @@
+import path from "node:path";
 import express from "express";
-import { addNote } from "./notesController";
+import { addNote } from "./noteController";
 import multer from "multer";
-import path from "path";
 
-const userRouter = express.Router();
+const noteRouter = express.Router();
 
 const upload = multer({
     dest: path.resolve(__dirname, "../../public/data/uploads"),
@@ -11,9 +11,10 @@ const upload = multer({
 
 });
 
-userRouter.post("/add", upload.fields([
+noteRouter.post("/", upload.fields([
     { name: "coverImage", maxCount: 1 },
     { name: "file", maxCount: 1 },
 ]), addNote);
 
-export default userRouter;
+
+export default noteRouter;
