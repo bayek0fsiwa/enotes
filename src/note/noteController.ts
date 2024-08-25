@@ -27,9 +27,12 @@ export const addNote = async (req: Request, res: Response, next: NextFunction) =
             folder: "note-pdfs",
             format: "pdf"
         });
-        console.log(uploadResult);
-        console.log(noteUploadResult);
+        // console.log(uploadResult);
+        // console.log(noteUploadResult);
         // add note to database
+        // @ts-ignore
+        console.log("userId", req.userId);
+        
         const newNote = await noteModel.create({
             title,
             genre,
