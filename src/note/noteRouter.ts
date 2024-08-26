@@ -1,6 +1,6 @@
 import path from "node:path";
 import express from "express";
-import { addNote, updateNote, listNotes, getSingleNote } from "./noteController";
+import { addNote, updateNote, listNotes, getSingleNote, deleteNote } from "./noteController";
 import multer from "multer";
 import authenticate from "../middlewares/authenticate";
 
@@ -26,5 +26,7 @@ noteRouter.patch("/:noteId", authenticate, upload.fields([
     { name: "coverImage", maxCount: 1 },
     { name: "file", maxCount: 1 },
 ]), updateNote);
+
+noteRouter.delete("/:noteId", authenticate, deleteNote)
 
 export default noteRouter;

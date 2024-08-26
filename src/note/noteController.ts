@@ -134,3 +134,35 @@ export const getSingleNote = async (req: Request, res: Response, next: NextFunct
         return next(createHttpError(500, "Failed fetching notes"))
     }
 }
+
+
+export const deleteNote = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const noteId = req.params.noteId
+        const note = await noteModel.findOne({_id: noteId})
+        if (!note) {
+            return next(createHttpError(404, "Note not found"))
+        }
+        
+        const _req = req as AuthRequest
+
+        if(note.author.toString() !== _req.userId) {
+            return next(createHttpError(403, "Unauthorized"))
+        }
+
+        const coverFileNameSplit = note.coverImage.split('/')
+        const coverImagePublicId = coverFileNameSplit.at(-2) + '/' + (coverFileNameSplit.at(-1)?.split('.').at(-2))
+        const noteFileNameSplit = note.file.split('/')
+        const noteFilePublicId = noteFileNameSplit.at(-2) + '/' + noteFileNameSplit.at(-1)
+        
+        await cloudinary.uploader.destroy(coverImagePublicId)
+        await cloudinary.uploader.destroy(noteFilePublicId, {
+            resource_type: "raw",
+        })
+
+        await noteModel.deleteOne({_id: noteId})
+        res.sendStatus(204)
+    } catch (error) {
+        return next(createHttpError(500, "Failed fetching notes"))
+    }
+}
