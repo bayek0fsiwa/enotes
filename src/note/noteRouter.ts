@@ -1,6 +1,6 @@
 import path from "node:path";
 import express from "express";
-import { addNote, updateNote } from "./noteController";
+import { addNote, updateNote, listNotes } from "./noteController";
 import multer from "multer";
 import authenticate from "../middlewares/authenticate";
 
@@ -23,5 +23,7 @@ noteRouter.patch("/:noteId", authenticate, upload.fields([
     { name: "file", maxCount: 1 },
 ]), updateNote);
 
+
+noteRouter.get("/", listNotes)
 
 export default noteRouter;

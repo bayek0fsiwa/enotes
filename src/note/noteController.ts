@@ -111,3 +111,12 @@ export const updateNote = async (req: Request, res: Response, next: NextFunction
     }
 
 }
+
+export const listNotes = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const note = await noteModel.find()
+        res.json(note)
+    } catch (err) {
+        return next(createHttpError(500, "Error while getting notes"))
+    }
+}
