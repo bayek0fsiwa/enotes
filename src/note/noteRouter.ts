@@ -1,6 +1,6 @@
 import path from "node:path";
 import express from "express";
-import { addNote } from "./noteController";
+import { addNote, updateNote } from "./noteController";
 import multer from "multer";
 import authenticate from "../middlewares/authenticate";
 
@@ -16,6 +16,12 @@ noteRouter.post("/", authenticate, upload.fields([
     { name: "coverImage", maxCount: 1 },
     { name: "file", maxCount: 1 },
 ]), addNote);
+
+
+noteRouter.patch("/:noteId", authenticate, upload.fields([
+    { name: "coverImage", maxCount: 1 },
+    { name: "file", maxCount: 1 },
+]), updateNote);
 
 
 export default noteRouter;
