@@ -1,6 +1,6 @@
 import path from "node:path";
 import express from "express";
-import { addNote, updateNote, listNotes } from "./noteController";
+import { addNote, updateNote, listNotes, getSingleNote } from "./noteController";
 import multer from "multer";
 import authenticate from "../middlewares/authenticate";
 
@@ -12,6 +12,10 @@ const upload = multer({
 
 });
 
+noteRouter.get("/", listNotes)
+
+noteRouter.get("/:noteId", getSingleNote)
+
 noteRouter.post("/", authenticate, upload.fields([
     { name: "coverImage", maxCount: 1 },
     { name: "file", maxCount: 1 },
@@ -22,8 +26,5 @@ noteRouter.patch("/:noteId", authenticate, upload.fields([
     { name: "coverImage", maxCount: 1 },
     { name: "file", maxCount: 1 },
 ]), updateNote);
-
-
-noteRouter.get("/", listNotes)
 
 export default noteRouter;

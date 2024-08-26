@@ -73,7 +73,7 @@ export const updateNote = async (req: Request, res: Response, next: NextFunction
         if (files.coverImage) {
             const filename = files.coverImage[0].filename
             const coverMimeType = files.coverImage[0].mimetype.split("/").at(-1)
-            const filePath = path.resolve(__dirname, "../../public/data/uploads" + filename)
+            const filePath = path.resolve(__dirname, "../../public/data/uploads/" + filename)
             completeCoverImage = filename
             const uploadResult = await cloudinary.uploader.upload(filePath, {
                 filename_override: completeCoverImage,
@@ -88,7 +88,7 @@ export const updateNote = async (req: Request, res: Response, next: NextFunction
         let completeFileName = ""
 
         if (files.file) {
-            const noteFilePath = path.resolve(__dirname, "../../public/data/uploads" + files.file[0].filename)
+            const noteFilePath = path.resolve(__dirname, "../../public/data/uploads/" + files.file[0].filename)
             const noteFileName = files.file[0].filename
             completeFileName = noteFileName
 
@@ -118,5 +118,19 @@ export const listNotes = async (req: Request, res: Response, next: NextFunction)
         res.json(note)
     } catch (err) {
         return next(createHttpError(500, "Error while getting notes"))
+    }
+}
+
+
+export const getSingleNote = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const noteId = req.params.noteId
+        const note = await noteModel.findOne({_id: noteId})
+        if (!note) {
+            return next(createHttpError(404, "Note not found"))
+        }
+        res.json(note)
+    } catch (error) {
+        return next(createHttpError(500, "Failed fetching notes"))
     }
 }
