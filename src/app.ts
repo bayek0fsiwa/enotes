@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
+import cors from "cors";
 import morgan from "morgan";
 import globalErrorHandler from "./middlewares/globalErrorHandler";
 import userRouter from "./user/userRouter";
@@ -10,8 +11,9 @@ import noteRouter from "./note/noteRouter";
 const app = express();
 
 // Middlewares
+app.use(cors({ origin: '*' }))
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(morgan("dev"));
 
